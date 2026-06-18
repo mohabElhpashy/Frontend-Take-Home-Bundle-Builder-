@@ -1,0 +1,200 @@
+.panel {
+  background: var(--c-panel);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-block);
+  padding: 22px;
+}
+
+.eyebrow {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  color: var(--c-text-3);
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-top: 6px;
+}
+
+.subtitle {
+  font-size: 0.85rem;
+  color: var(--c-text-2);
+  margin-top: 6px;
+}
+
+.lines {
+  margin-top: 18px;
+}
+
+.group {
+  padding-bottom: 6px;
+}
+
+.groupLabel {
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--c-text-3);
+  padding: 12px 0 8px;
+  border-top: 1px solid var(--c-divider);
+}
+.group:first-child .groupLabel {
+  border-top: none;
+  padding-top: 0;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 7px 0;
+}
+
+.rowMain {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+}
+
+.name {
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+.variant {
+  color: var(--c-text-2);
+  font-weight: 400;
+}
+
+.planFirst {
+  font-weight: 700;
+}
+.planRest {
+  color: var(--c-primary);
+  font-weight: 700;
+}
+
+.shipIcon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  color: var(--c-success);
+  flex: none;
+}
+.shipIcon svg {
+  width: 26px;
+  height: 26px;
+}
+
+.rowControls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: none;
+}
+
+/* ---- Summary ---------------------------------------------------------- */
+
+.summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid var(--c-divider);
+}
+
+.summaryRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.financing {
+  display: inline-block;
+  padding: 4px 10px;
+  background: var(--c-primary);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 600;
+  border-radius: var(--r-pill);
+}
+
+.totalRow {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.totalCompare {
+  font-size: 1rem;
+  color: var(--c-strike-soft);
+  text-decoration: line-through;
+  font-variant-numeric: tabular-nums;
+}
+
+.total {
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: var(--c-primary);
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.savings {
+  text-align: center;
+  color: var(--c-success);
+  font-size: 0.82rem;
+  font-weight: 600;
+  margin-top: 14px;
+}
+
+.checkout {
+  width: 100%;
+  margin-top: 12px;
+  padding: 14px;
+  background: var(--c-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--r-control);
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background 0.12s ease;
+}
+.checkout:hover {
+  background: var(--c-primary-press);
+}
+
+.saveLink {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+  padding: 4px;
+  background: none;
+  border: none;
+  color: var(--c-text-2);
+  font-size: 0.85rem;
+  font-style: italic;
+  text-decoration: underline;
+}
+.saveLink:hover {
+  color: var(--c-primary);
+}
+
+.toast {
+  min-height: 18px;
+  margin-top: 8px;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--c-success);
+}

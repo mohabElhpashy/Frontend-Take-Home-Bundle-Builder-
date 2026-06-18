@@ -1,0 +1,48 @@
+.price {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+}
+
+.right {
+  align-items: flex-end;
+  text-align: right;
+}
+.left {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.compare {
+  font-size: 0.78rem;
+  text-decoration: line-through;
+}
+
+.active {
+  font-weight: 600;
+}
+
+/* Card: red strike, dark active price */
+.card .compare {
+  color: var(--c-strike-red);
+}
+.card .active {
+  color: var(--c-text);
+  font-size: 1rem;
+}
+
+/* Review: grey strike, indigo active price */
+.review .compare {
+  color: var(--c-strike-soft);
+}
+.review .active {
+  color: var(--c-primary);
+  font-size: 0.92rem;
+}
+
+.free {
+  color: var(--c-success) !important;
+  font-weight: 700;
+}

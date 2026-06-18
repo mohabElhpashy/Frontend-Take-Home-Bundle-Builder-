@@ -1,0 +1,51 @@
+.page {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 28px 24px 64px;
+}
+
+.page__header {
+  display: none;
+}
+
+.page__title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 384px;
+  gap: 24px;
+  align-items: start;
+}
+
+.layout__review {
+  position: sticky;
+  top: 24px;
+}
+
+/* ---- Tablet: review panel drops below the builder --------------------- */
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+  .layout__review {
+    position: static;
+    max-width: 560px;
+    width: 100%;
+    margin: 0 auto;
+  }
+}
+
+/* ---- Phone ------------------------------------------------------------ */
+@media (max-width: 560px) {
+  .page {
+    padding: 18px 14px 48px;
+  }
+  .page__header {
+    display: block;
+    margin-bottom: 14px;
+  }
+}

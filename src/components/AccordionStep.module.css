@@ -1,0 +1,82 @@
+.step {
+  border-top: 1px solid var(--c-divider);
+}
+.step:first-child {
+  border-top: none;
+}
+
+.eyebrow {
+  padding: 14px 20px 0;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  color: var(--c-text-3);
+}
+
+/* The open step's header + body sit on a lavender block. */
+.open .inner {
+  margin: 8px 12px 14px;
+  background: var(--c-panel);
+  border-radius: var(--r-block);
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 20px;
+  background: none;
+  border: none;
+  text-align: left;
+}
+.open .header {
+  padding: 16px 18px;
+}
+
+.heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.stepIcon {
+  width: 22px;
+  height: 22px;
+  color: var(--c-text);
+  flex: none;
+}
+
+.title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.state {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--c-primary);
+  flex: none;
+}
+
+.count {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.chevron {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.18s ease;
+}
+.chevronUp {
+  transform: rotate(180deg);
+}
+
+.body {
+  padding: 0 18px 18px;
+}

@@ -1,0 +1,29 @@
+.thumb {
+  display: grid;
+  place-items: center;
+  background: linear-gradient(160deg, #f7f8fe 0%, #eef0fb 100%);
+  border: 1px solid var(--c-border);
+  border-radius: 12px;
+  color: #6b6f8c;
+  flex: none;
+}
+
+.icon {
+  width: 56%;
+  height: 56%;
+}
+
+.lg {
+  width: 78px;
+  height: 78px;
+  border-radius: 16px;
+}
+.md {
+  width: 56px;
+  height: 56px;
+}
+.sm {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+}

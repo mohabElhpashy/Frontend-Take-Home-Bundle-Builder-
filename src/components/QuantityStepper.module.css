@@ -1,0 +1,53 @@
+.stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid var(--c-chip-border);
+  border-radius: 8px;
+  background: var(--c-card);
+  color: var(--c-text);
+  transition: border-color 0.12s ease, background 0.12s ease, color 0.12s ease;
+}
+
+.btn:hover:not(:disabled) {
+  border-color: var(--c-primary);
+  color: var(--c-primary);
+}
+
+.btn:disabled {
+  color: #c2c4d4;
+  cursor: not-allowed;
+  background: #f6f7fc;
+}
+
+.glyph {
+  display: block;
+}
+
+.value {
+  min-width: 22px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.95rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Compact variant used in the review panel */
+.sm .btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+}
+.sm .value {
+  min-width: 18px;
+  font-size: 0.85rem;
+}

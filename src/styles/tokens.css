@@ -1,0 +1,41 @@
+:root {
+  /* Brand / accent */
+  --c-primary: #3d1ae5;
+  --c-primary-press: #3013c2;
+  --c-badge: #5b3df5;
+
+  /* Surfaces */
+  --c-page: #ffffff;
+  --c-panel: #edf0fe; /* lavender block behind the open step + review */
+  --c-card: #ffffff;
+
+  /* Text */
+  --c-text: #1b1b2f;
+  --c-text-2: #5c5c70;
+  --c-text-3: #9090a6; /* eyebrows / category subheads */
+
+  /* Pricing */
+  --c-strike-soft: #a0a0b4; /* struck price in the review panel */
+  --c-strike-red: #e5484d; /* struck price on product cards */
+  --c-success: #16a36a; /* savings callout + FREE */
+
+  /* Lines / borders */
+  --c-border: #e4e6f1;
+  --c-chip-border: #d6d8e6;
+  --c-divider: #e7e9f3;
+
+  /* Shape */
+  --r-card: 14px;
+  --r-block: 16px;
+  --r-pill: 999px;
+  --r-control: 10px;
+
+  /* Spacing rhythm */
+  --gap: 16px;
+
+  --shadow-card: 0 1px 2px rgba(27, 27, 47, 0.05);
+  --shadow-pop: 0 8px 24px rgba(27, 27, 47, 0.12);
+
+  --font: 'Poppins', 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue',
+    Arial, sans-serif;
+}

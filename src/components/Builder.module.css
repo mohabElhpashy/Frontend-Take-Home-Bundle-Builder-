@@ -1,0 +1,51 @@
+.builder {
+  background: var(--c-card);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-block);
+  overflow: hidden;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+/* Odd last card spans the row and centers (e.g. Wyze Battery Cam Pro). */
+.wide {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+}
+.wide > * {
+  width: min(100%, calc(50% - 7px));
+}
+
+.nextRow {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.next {
+  padding: 11px 22px;
+  background: var(--c-card);
+  border: 1px solid var(--c-primary);
+  border-radius: var(--r-control);
+  color: var(--c-primary);
+  font-weight: 600;
+  font-size: 0.92rem;
+  transition: background 0.12s ease;
+}
+.next:hover {
+  background: #f1efff;
+}
+
+@media (max-width: 560px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .wide > * {
+    width: 100%;
+  }
+}
