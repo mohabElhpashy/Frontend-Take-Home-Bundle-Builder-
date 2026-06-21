@@ -1,19 +1,17 @@
-import catalogJson from '../data/catalog.json';
 import {
   DEFAULT_VARIANT,
   type Catalog,
   type Product,
   type ReviewGroup,
   type StepId,
-} from '../types';
-import { round2 } from '../lib/money';
+} from '@/types';
+import { round2 } from '@/lib/money';
 
-// JSON is inferred with widened string types, so cast through unknown.
-export const catalog = catalogJson as unknown as Catalog;
-
-export const productsById: Record<string, Product> = Object.fromEntries(
-  catalog.products.map((p) => [p.id, p]),
-);
+/**
+ * All cart logic is pure: every function takes the `catalog` it needs as an
+ * argument (or closes over it via createCartReducer). Nothing reads a global,
+ * so reducers and selectors are trivially unit-testable.
+ */
 
 /** Order review groups render in, top to bottom. */
 export const REVIEW_GROUP_ORDER: ReviewGroup[] = [
@@ -22,6 +20,11 @@ export const REVIEW_GROUP_ORDER: ReviewGroup[] = [
   'Accessories',
   'Plan',
 ];
+
+/** Index products by id for O(1) lookups. */
+export function indexProducts(catalog: Catalog): Record<string, Product> {
+  return Object.fromEntries(catalog.products.map((p) => [p.id, p]));
+}
 
 // ---------------------------------------------------------------------------
 // State
@@ -42,7 +45,7 @@ export function firstVariantId(product: Product): string {
 }
 
 /** Build the seeded initial state straight from the catalog. */
-export function createInitialState(): CartState {
+export function createInitialState(catalog: Catalog): CartState {
   const quantities: CartState['quantities'] = {};
   const activeVariant: CartState['activeVariant'] = {};
 
@@ -96,54 +99,64 @@ function withQty(
   };
 }
 
-export function cartReducer(state: CartState, action: CartAction): CartState {
-  switch (action.type) {
-    case 'SET_QTY': {
-      const qty = clampQty(productsById[action.productId], action.qty);
-      return withQty(state, action.productId, action.variantId, qty);
-    }
-    case 'STEP_QTY': {
-      const current =
-        state.quantities[action.productId]?.[action.variantId] ?? 0;
-      const qty = clampQty(productsById[action.productId], current + action.delta);
-      return withQty(state, action.productId, action.variantId, qty);
-    }
-    case 'SELECT_VARIANT': {
-      return {
-        ...state,
-        activeVariant: {
-          ...state.activeVariant,
-          [action.productId]: action.variantId,
-        },
-      };
-    }
-    case 'SELECT_SINGLE': {
-      // Single-select step (the plan): chosen product -> 1, siblings -> 0.
-      const product = productsById[action.productId];
-      if (!product) return state;
-      const quantities = { ...state.quantities };
-      for (const sibling of catalog.products) {
-        if (sibling.step !== product.step) continue;
-        const vid = firstVariantId(sibling);
-        quantities[sibling.id] = {
-          ...state.quantities[sibling.id],
-          [vid]: sibling.id === action.productId ? 1 : 0,
+export type CartReducer = (state: CartState, action: CartAction) => CartState;
+
+/** Build a reducer bound to a catalog (for product lookups + single-select). */
+export function createCartReducer(catalog: Catalog): CartReducer {
+  const productsById = indexProducts(catalog);
+
+  return function cartReducer(state, action) {
+    switch (action.type) {
+      case 'SET_QTY': {
+        const qty = clampQty(productsById[action.productId], action.qty);
+        return withQty(state, action.productId, action.variantId, qty);
+      }
+      case 'STEP_QTY': {
+        const current =
+          state.quantities[action.productId]?.[action.variantId] ?? 0;
+        const qty = clampQty(
+          productsById[action.productId],
+          current + action.delta,
+        );
+        return withQty(state, action.productId, action.variantId, qty);
+      }
+      case 'SELECT_VARIANT': {
+        return {
+          ...state,
+          activeVariant: {
+            ...state.activeVariant,
+            [action.productId]: action.variantId,
+          },
         };
       }
-      return { ...state, quantities };
+      case 'SELECT_SINGLE': {
+        // Single-select step (the plan): chosen product -> 1, siblings -> 0.
+        const product = productsById[action.productId];
+        if (!product) return state;
+        const quantities = { ...state.quantities };
+        for (const sibling of catalog.products) {
+          if (sibling.step !== product.step) continue;
+          const vid = firstVariantId(sibling);
+          quantities[sibling.id] = {
+            ...state.quantities[sibling.id],
+            [vid]: sibling.id === action.productId ? 1 : 0,
+          };
+        }
+        return { ...state, quantities };
+      }
+      case 'TOGGLE_STEP':
+        return {
+          ...state,
+          openStep: state.openStep === action.stepId ? null : action.stepId,
+        };
+      case 'OPEN_STEP':
+        return { ...state, openStep: action.stepId };
+      case 'RESTORE':
+        return action.state;
+      default:
+        return state;
     }
-    case 'TOGGLE_STEP':
-      return {
-        ...state,
-        openStep: state.openStep === action.stepId ? null : action.stepId,
-      };
-    case 'OPEN_STEP':
-      return { ...state, openStep: action.stepId };
-    case 'RESTORE':
-      return action.state;
-    default:
-      return state;
-  }
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -157,7 +170,11 @@ export function productTotalQty(state: CartState, productId: string): number {
 }
 
 /** Distinct products with qty > 0 in a given step (the "N selected" count). */
-export function selectedCountForStep(state: CartState, stepId: StepId): number {
+export function selectedCountForStep(
+  catalog: Catalog,
+  state: CartState,
+  stepId: StepId,
+): number {
   return catalog.products.filter(
     (p) => p.step === stepId && productTotalQty(state, p.id) > 0,
   ).length;
@@ -176,7 +193,7 @@ export interface ReviewLine {
 }
 
 /** Every variant with qty > 0 becomes its own line, in catalog + group order. */
-export function reviewLines(state: CartState): ReviewLine[] {
+export function reviewLines(catalog: Catalog, state: CartState): ReviewLine[] {
   const lines: ReviewLine[] = [];
 
   for (const group of REVIEW_GROUP_ORDER) {
@@ -215,7 +232,7 @@ export interface Totals {
   financingMonthly: number;
 }
 
-export function computeTotals(lines: ReviewLine[]): Totals {
+export function computeTotals(catalog: Catalog, lines: ReviewLine[]): Totals {
   let total = 0;
   let compareTotal = 0;
   for (const line of lines) {

@@ -8,6 +8,9 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
 
+    /* Path alias */
+    "paths": { "@/*": ["./src/*"] },
+
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
@@ -22,5 +25,6 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["src/**/*.test.ts", "src/**/*.test.tsx", "src/test/**"]
 }

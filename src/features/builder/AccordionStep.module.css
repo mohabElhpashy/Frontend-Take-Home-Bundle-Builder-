@@ -1,0 +1,101 @@
+.eyebrow {
+  padding: 20px 15px 0;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: #484848;
+}
+
+/* Top border sits under the "STEP X OF 4" eyebrow. */
+.inner {
+  margin: 3px 0 0;
+  border-top: 0.5px solid #1f1f1f;
+}
+
+/* Closed steps add a bottom border too. */
+.step:not(.open) {
+  border-bottom: 0.5px solid #1f1f1f;
+}
+
+/* The active/open section (eyebrow + block) gets the lavender fill. */
+.open {
+  background: var(--c-panel);
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 20px 15px;
+  background: none;
+  border: none;
+  text-align: left;
+}
+.open .header {
+  padding: 20px 15px;
+}
+
+.heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.stepIcon {
+  width: 22px;
+  height: 22px;
+  color: #6f7882;
+  flex: none;
+}
+
+.title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: #0b0d10;
+}
+
+/* Mobile: smaller title, tight line-height, no tracking. */
+@media (max-width: 640px) {
+  .title {
+    font-size: 16px;
+    line-height: 1;
+    letter-spacing: 0;
+  }
+}
+
+.state {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--c-primary);
+  flex: none;
+}
+
+.count {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0;
+  text-align: center;
+  color: #4e2fd2;
+}
+
+.chevron {
+  width: 12px;
+  height: 12px;
+  color: #4e2fd2;
+  transition: transform 0.18s ease;
+}
+.chevronUp {
+  transform: rotate(180deg);
+}
+
+.body {
+  padding: 0 18px 18px;
+}

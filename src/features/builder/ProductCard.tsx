@@ -1,11 +1,11 @@
-import type { Product } from '../types';
-import { useCart } from '../state/CartContext';
-import { firstVariantId, productTotalQty } from '../state/cart';
-import { ProductThumb } from './ProductThumb';
+import type { Product } from '@/types';
+import { useCart } from '@/state/CartContext';
+import { firstVariantId, productTotalQty } from '@/state/cart';
+import { ProductThumb } from '@/components/ProductThumb';
 import { VariantSelector } from './VariantSelector';
-import { QuantityStepper } from './QuantityStepper';
-import { Price } from './Price';
-import { Check } from './icons';
+import { QuantityStepper } from '@/components/QuantityStepper';
+import { Price } from '@/components/Price';
+import { Check } from '@/components/icons';
 import styles from './ProductCard.module.css';
 
 interface Props {
@@ -17,16 +17,20 @@ export function ProductCard({ product, selectionMode }: Props) {
   const { state, dispatch } = useCart();
 
   const activeVariant = state.activeVariant[product.id] ?? firstVariantId(product);
+  const activeImage =
+    product.variants?.find((v) => v.id === activeVariant)?.image ?? product.image;
   const variantQty = state.quantities[product.id]?.[activeVariant] ?? 0;
   const totalQty = productTotalQty(state, product.id);
   const selected = totalQty > 0;
 
   return (
-    <article className={`${styles.card} ${selected ? styles.selected : ''}`}>
+    <article
+      className={`${styles.card} ${selected ? styles.selected : ''} gap-[19px] xl:flex-col xl:gap-2`}
+    >
       {product.badge && <span className={styles.badge}>{product.badge}</span>}
 
-      <div className={styles.media}>
-        <ProductThumb icon={product.icon} size="lg" />
+      <div className={`${styles.media} pt-1.5 xl:pt-0 xl:self-center`}>
+        <ProductThumb icon={product.icon} image={activeImage} alt={product.name} size="lg" />
       </div>
 
       <div className={styles.body}>

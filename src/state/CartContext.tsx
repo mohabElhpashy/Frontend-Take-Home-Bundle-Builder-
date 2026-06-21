@@ -3,31 +3,41 @@ import {
   useContext,
   useMemo,
   useReducer,
+  type Dispatch,
   type ReactNode,
 } from 'react';
 import {
-  cartReducer,
+  createCartReducer,
   createInitialState,
   type CartAction,
   type CartState,
 } from './cart';
-import { loadState } from '../lib/persistence';
+import { loadState } from '@/lib/persistence';
+import type { Catalog } from '@/types';
 
 interface CartContextValue {
+  catalog: Catalog;
   state: CartState;
-  dispatch: React.Dispatch<CartAction>;
+  dispatch: Dispatch<CartAction>;
 }
 
 const CartContext = createContext<CartContextValue | null>(null);
 
-/** Restore a saved system if one exists, otherwise start from the seed. */
-function initState(): CartState {
-  return loadState() ?? createInitialState();
-}
+export function CartProvider({
+  catalog,
+  children,
+}: {
+  catalog: Catalog;
+  children: ReactNode;
+}) {
+  // Reducer is bound to the catalog; rebuilt only if the catalog changes.
+  const reducer = useMemo(() => createCartReducer(catalog), [catalog]);
+  const [state, dispatch] = useReducer(reducer, catalog, (c) => {
+    return loadState(c) ?? createInitialState(c);
+  });
 
-export function CartProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(cartReducer, undefined, initState);
-  const value = useMemo(() => ({ state, dispatch }), [state]);
+  const value = useMemo(() => ({ catalog, state, dispatch }), [catalog, state]);
+
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }
 

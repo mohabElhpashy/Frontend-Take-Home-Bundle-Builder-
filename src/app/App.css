@@ -1,0 +1,35 @@
+.page {
+  max-width: 1290px;
+  margin: 0 auto;
+  padding: 28px 24px 64px;
+  background: #ffffff;
+}
+
+.page__header {
+  display: none;
+}
+
+.page__title {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.06px;
+  text-align: center;
+  color: #1f1f1f;
+}
+
+/* The builder | review layout lives in App.tsx via Tailwind responsive classes. */
+
+/* ---- Phone ------------------------------------------------------------ */
+/* Stacked layout (<= 1023px): full-width, no side padding. */
+@media (max-width: 1023px) {
+  .page {
+    padding: 31px 0 48px;
+  }
+}
+@media (max-width: 640px) {
+  .page__header {
+    display: block;
+    margin-bottom: 14px;
+  }
+}

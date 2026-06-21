@@ -1,11 +1,15 @@
 .thumb {
   display: grid;
   place-items: center;
-  background: linear-gradient(160deg, #f7f8fe 0%, #eef0fb 100%);
-  border: 1px solid var(--c-border);
+  background: transparent;
   border-radius: 12px;
   color: #6b6f8c;
   flex: none;
+}
+
+/* White tile only behind an actual product photo. */
+.hasImage {
+  background: #ffffff;
 }
 
 .icon {
@@ -13,17 +17,42 @@
   height: 56%;
 }
 
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: inherit;
+}
+
 .lg {
-  width: 78px;
-  height: 78px;
-  border-radius: 16px;
+  width: 101px;
+  height: 137px;
+  border-radius: 5px;
+}
+
+/* Large screen: bigger photo in the one-row vertical cards. */
+@media (min-width: 1280px) {
+  .lg {
+    width: 143px;
+    height: 150px;
+  }
 }
 .md {
   width: 56px;
   height: 56px;
 }
 .sm {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
+  width: 41px;
+  height: 41px;
+  border-radius: 5px;
+}
+/* Icon-only review thumbs shrink to the icon so the label sits close. */
+.sm:not(.hasImage) {
+  width: auto;
+}
+/* Review icons render at their natural aspect, 31px tall (plan = 26x31). */
+.sm .icon {
+  width: auto;
+  height: 31px;
+  justify-self: start;
 }

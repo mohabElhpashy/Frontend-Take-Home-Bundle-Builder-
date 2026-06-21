@@ -1,127 +1,133 @@
 # Wyze Bundle Builder
 
-A multi-step bundle builder with a live review panel, built as a React
-prototype. A shopper assembles a home-security system through a 4-step
-accordion on the left while a summary on the right recalculates in real time.
+A multi-step bundle builder with a live review panel. A shopper assembles a
+home-security system through a four-step accordion (Cameras → Sensors → Add
+extra protection → Plan) while a summary on the right recalculates totals,
+savings, and financing in real time. Everything renders from a JSON catalog
+served by a small API — nothing is hardcoded per product.
 
 ![Desktop](docs/desktop.png)
+![Mobile](docs/mobile.png)
 
-## Run it
+## Quick start
 
-Requires Node 18+ (developed on Node 20).
+Requires **Node 20+**.
 
 ```bash
 npm install
-npm run dev      # start the dev server (Vite prints the local URL)
+npm run dev
 ```
 
-Other scripts:
+`npm run dev` starts **both** the Vite dev server and the API together (via
+`concurrently`). Vite prints the local URL (e.g. http://localhost:5173); the
+API runs on `http://localhost:8787` and Vite proxies `/api/*` to it.
+
+> Builds and runs from a clean clone with just `npm install && npm run dev`.
+
+### Production
 
 ```bash
-npm run build    # type-check (tsc) + production build to dist/
-npm run preview  # serve the production build locally
-npm run lint     # eslint
+npm run build     # type-check + bundle the app into dist/
+npm start         # Express serves dist/ AND the API on one port (8787)
 ```
 
-Builds and runs from a clean clone — `npm install && npm run dev`.
+### Scripts
 
-## What's implemented
+| Script | What it does |
+| --- | --- |
+| `npm run dev` | Vite + API together (development) |
+| `npm run dev:web` / `npm run dev:api` | Run either half on its own |
+| `npm run build` | `tsc -b` type-check + production build to `dist/` |
+| `npm start` | Production server (API + static `dist/`) |
+| `npm test` | Vitest unit + render tests |
+| `npm run test:watch` | Vitest in watch mode |
+| `npm run lint` | ESLint |
 
-- **4-step accordion builder** — Cameras / Plan / Sensors / Add extra protection.
-  Step 1 is open on load; headers show `STEP X OF 4`, an icon, the title, and a
-  state indicator (`N selected` + up-chevron when open, down-chevron when
-  collapsed). Each open step ends with a **Next: …** button that advances.
-- **Product cards** — optional discount badge, image, title, description,
-  "Learn More", variant selector, quantity stepper, and compare-at + active
-  pricing. Cards with quantity > 0 render in their **selected** (highlighted)
-  state. Only the elements a product actually has are rendered.
-- **Variant selector with per-variant quantities** — each color tracks its own
-  count. The card's stepper is bound to the **active** variant: add 2 Black,
-  switch to White, and the stepper reads White's count (0) while the 2 Black are
-  untouched. Every variant with a count > 0 shows as its own line in the review.
-- **Live review panel** — items grouped under Cameras / Sensors / Accessories /
-  Plan, each with a thumbnail, name, its own stepper, and pricing. Below: a
-  shipping row, satisfaction seal, financing line, total (pre-discount struck
-  through), savings callout, Checkout, and Save link.
-- **Synced steppers** — the card stepper and the review-panel stepper for the
-  same product/variant always agree; changing either updates everything.
-- **Persistence** — "Save my system for later" writes the configuration to
-  `localStorage`; it's restored on the next visit / reload.
-- **Responsive** — two columns on desktop (sticky review), collapsing to a
-  single stacked column with the review below the builder on tablet/phone.
-- **Checkout** — placeholder; shows an inline confirmation.
+> Note: `npm run preview` serves only the static build, so the catalog API
+> won't be there. Use `npm run dev` (development) or `npm start` (production).
+
+## Data & API (the bonus)
+
+The app is **fully data-driven** from [`src/data/catalog.json`](src/data/catalog.json) —
+steps, products, variants, seeded quantities, pricing, and the financing
+divisor all live there.
+
+- A small **Express** API ([`server/index.js`](server/index.js)) serves it at
+  `GET /api/catalog` (in-memory cached), plus `GET /api/health`. In production
+  the same server also serves the built front end.
+- The client fetches it with **React Query** (loading / error / retry handled
+  by the query) and **validates the response with zod** at the boundary — the
+  zod schema in [`src/types`](src/types/index.ts) is the single source of truth,
+  and all TypeScript types are inferred from it.
+- The initial state is **seeded from the catalog**, so the app loads looking
+  exactly like the design — including the review panel's pre-populated sensors,
+  accessory, and plan that have no add-control in that view.
 
 ## Architecture
 
 ```
 src/
-  data/catalog.json        # single source of truth: steps, products, variants,
-                           # prices, seed quantities, shipping
-  types.ts                 # domain types the catalog is validated against
-  state/
-    cart.ts                # reducer + pricing/selectors (the core logic)
-    CartContext.tsx        # context provider; restores saved state on init
-  lib/
-    money.ts               # cents-safe rounding + formatting
-    persistence.ts         # localStorage load/save (defensive merge)
-  components/              # ProductCard, VariantSelector, QuantityStepper,
-                          # AccordionStep, Builder, ReviewPanel, Price, …
-  styles/tokens.css        # design tokens (color/spacing/radius)
+  app/          App shell, entry, error boundary, global CSS
+  api/          React Query client + useCatalog() hook
+  features/     Feature views — builder/ and review/
+  components/   Shared UI — Price, QuantityStepper, ProductThumb, icons …
+  state/        Cart reducer + context (pure logic)
+  lib/          money, persistence
+  types/        zod schemas + inferred types
+  styles/       design tokens (alias to the Tailwind @theme)
+  data/         catalog.json
+server/         Express API
 ```
 
-**Data-driven.** Everything renders from `catalog.json` — there is no
-per-product markup. Add a product or a whole step by editing the JSON; the
-builder, the review groups, the "N selected" counts, and the totals all follow.
+A few deliberate choices:
 
-**State.** A `useReducer` store keyed as `quantities[productId][variantId]`,
-plus the active variant per product and the open step. The reducer is pure; all
-derived values (review lines, totals, savings, financing) are computed by
-selectors in `cart.ts`, so the UI is a projection of one state tree.
+- **Pure cart logic.** The reducer and selectors take the `catalog` as an
+  argument (`createCartReducer(catalog)`, `reviewLines(catalog, state)`, …)
+  rather than reading a global. The catalog flows through React context, which
+  keeps the logic trivially unit-testable.
+- **Per-variant quantities.** Each color variant tracks its own count; the card
+  stepper is bound to the active variant, and every variant with qty > 0 shows
+  as its own review line. Products without colors just get a single stepper.
+- **Design tokens in one place.** Colors, radii, shadows, the font, and a custom
+  `split:` breakpoint live in a Tailwind v4 `@theme` block; the CSS Modules
+  alias those vars, so a value changes in exactly one spot.
+- **`@/` path alias** for clean imports across the layered folders.
+- **Persistence** via `localStorage` behind "Save my system for later".
 
-**Pricing.** Card prices are unit prices; review line prices are `unit × qty`.
-The total = sum of one-time product line totals + the selected plan's monthly
-price; savings = compare-at total − active total.
+## Testing
 
-## Decisions & tradeoffs
+```bash
+npm test
+```
 
-- **Pricing made internally consistent.** The Figma's seeded numbers are
-  self-inconsistent in one spot: the Wyze Cam Pan v3 *card* shows `$39.98 →
-  $34.98`, but its *review line* (`$57.98 → $47.98` at qty 2) and the headline
-  total (`$187.89`, save `$50.92`) only reconcile with a unit price of
-  `$28.99 → $23.99`. I made the **review panel + grand total + savings match the
-  design exactly** (the brief asks the app to "load looking exactly like the
-  design," and those are the prominent numbers), which means the Pan v3 card
-  shows `$28.99 → $23.99` rather than the Figma card's `$34.98`. Every other card
-  matches the Figma, and all numbers in the app are now arithmetically coherent
-  and recompute correctly as quantities change.
-- **Save semantics.** Persistence is triggered by the **Save my system for
-  later** link (not autosaved on every change) so the link has real meaning,
-  matching the brief's "configure → save → leave → return" flow. Restoring on
-  load defensively merges the save onto a fresh seed, so a changed catalog never
-  breaks an old save. Switching to autosave-on-change would be a one-line change.
-- **Plan step is single-select.** Picking a plan deselects the others
-  (`selectionMode: "single"` in the catalog); the plan renders a Select/Selected
-  toggle instead of a stepper, and the review plan line has no stepper — matching
-  the design.
-- **Product imagery is placeholder line icons** (`components/icons.tsx`) rather
-  than the photography in the Figma, since the source images weren't available.
-  `ProductThumb` is the single swap point for real `<img>` assets.
-- **Variant labels in the review** only appear when a product has 2+ active
-  variant lines (to disambiguate, e.g. "Wyze Cam v4 · Black"); a single variant
-  shows just the product name, as in the design.
-- **Selected-chip styling** is intentionally subtle per the brief, which asked
-  to prioritize the selection/quantity behavior over chip highlighting.
+Vitest + Testing Library cover the pure logic (reducer transitions, clamping,
+immutability, totals, selectors, the per-variant behavior) and a render /
+interaction test that drives the reducer through a real click.
 
-## Not done / would do next
+## Tech stack
 
-- A small backend serving `catalog.json` (the noted bonus) — it's a local file.
-- Unit tests for the pricing selectors (the logic is isolated in `cart.ts` and
-  easy to test); behavior was verified with a Puppeteer interaction script
-  during development.
-- Real product photography and the exact brand typeface (uses Poppins).
+React 19 · TypeScript · Vite · React Query · zod · Tailwind v4 (utilities) +
+CSS Modules · Express · Vitest + Testing Library.
 
-## Screenshots
+## Decisions, tradeoffs & notes
 
-| Desktop | Phone |
-| --- | --- |
-| ![desktop](docs/desktop.png) | ![mobile](docs/mobile.png) |
+- **Styling is a hybrid.** Layout/responsive behavior is Tailwind utility
+  classes; component-level styling is CSS Modules. Tailwind is imported
+  utilities-only (no preflight) so it coexists with the existing styles instead
+  of resetting them — two systems, but each used where it's strongest.
+- **Font.** The design specs call for *Gilroy* (a paid font). I applied every
+  numeric spec (size / weight / line-height / spacing) but kept **Poppins** as
+  the family, since Gilroy isn't freely redistributable. Dropping the Gilroy
+  files in and adding `@font-face` is the only step to make it pixel-exact.
+- **Backend scope.** The API serves a single catalog file (cached) — no
+  database or auth, which suits the task. Checkout and "Save for later" are
+  demo actions (the latter persists to `localStorage`).
+- **Responsive.** Three layouts — stacked (mobile), builder-plus-sidebar
+  (medium, ≥1140px), and a wide layout where the cameras sit in one row with the
+  review full-width below (≥1280px).
+
+### What I'd do next
+
+- Swap in Gilroy once licensed.
+- More tests (additional component coverage, an end-to-end happy path).
+- A deeper accessibility pass (focus management, announcements).

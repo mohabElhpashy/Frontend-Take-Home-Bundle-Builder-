@@ -1,5 +1,9 @@
-import { createInitialState, productsById, type CartState } from '../state/cart';
-import { DEFAULT_VARIANT } from '../types';
+import {
+  createInitialState,
+  indexProducts,
+  type CartState,
+} from '@/state/cart';
+import { DEFAULT_VARIANT, type Catalog } from '@/types';
 
 const STORAGE_KEY = 'wyze-bundle-builder:v1';
 
@@ -22,7 +26,7 @@ export function saveState(state: CartState): boolean {
  * so a changed catalog (new products/variants) never breaks an old save.
  * Returns null when there's nothing valid to restore.
  */
-export function loadState(): CartState | null {
+export function loadState(catalog: Catalog): CartState | null {
   let raw: string | null;
   try {
     raw = localStorage.getItem(STORAGE_KEY);
@@ -39,7 +43,8 @@ export function loadState(): CartState | null {
   }
   if (!parsed || typeof parsed.quantities !== 'object') return null;
 
-  const base = createInitialState();
+  const base = createInitialState(catalog);
+  const productsById = indexProducts(catalog);
 
   for (const [productId, byVariant] of Object.entries(parsed.quantities ?? {})) {
     const product = productsById[productId];

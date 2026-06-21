@@ -1,4 +1,4 @@
-import type { Variant } from '../types';
+import type { Variant } from '@/types';
 import styles from './VariantSelector.module.css';
 
 interface Props {
@@ -21,11 +21,15 @@ export function VariantSelector({ variants, activeId, onSelect }: Props) {
             className={`${styles.chip} ${active ? styles.active : ''}`}
             onClick={() => onSelect(v.id)}
           >
-            <span
-              className={styles.swatch}
-              style={{ background: v.swatch }}
-              aria-hidden="true"
-            />
+            {v.image ? (
+              <img src={v.image} alt="" className={styles.swatchImg} />
+            ) : (
+              <span
+                className={styles.swatch}
+                style={{ background: v.swatch }}
+                aria-hidden="true"
+              />
+            )}
             <span className={styles.label}>{v.label}</span>
           </button>
         );

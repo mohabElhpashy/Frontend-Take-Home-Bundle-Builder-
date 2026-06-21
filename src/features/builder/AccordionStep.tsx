@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
-import type { StepDef } from '../types';
-import { ProductIcon, ChevronDown } from './icons';
+import type { StepDef } from '@/types';
+import { ProductIcon, ChevronDown } from '@/components/icons';
 import styles from './AccordionStep.module.css';
 
 interface Props {

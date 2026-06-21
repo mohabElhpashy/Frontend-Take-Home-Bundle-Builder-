@@ -1,0 +1,76 @@
+.builder {
+  background: var(--c-card);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-block) var(--r-block) 0 0;
+  overflow: hidden;
+}
+
+/* Stacked layout: edge-to-edge, no side borders/radius. */
+@media (max-width: 1023px) {
+  .builder {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+}
+
+.cell {
+  display: flex;
+}
+.cell > * {
+  width: 100%;
+}
+
+/* Odd last card centers at a single column's width — only in the 2-up layout. */
+@media (max-width: 1279px) {
+  .wide {
+    grid-column: 1 / -1;
+    justify-content: center;
+  }
+  .wide > * {
+    width: calc(50% - 6.5px);
+  }
+}
+@media (max-width: 599px) {
+  .wide > * {
+    width: 100%;
+  }
+}
+
+.nextRow {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.next {
+  padding: 11px 22px;
+  background: var(--c-panel);
+  border: 1px solid var(--c-primary);
+  border-radius: var(--r-control);
+  color: #4e2fd2;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 24px;
+  letter-spacing: 0;
+  text-align: center;
+  transition: background 0.12s ease;
+}
+.next:hover {
+  background: #f1efff;
+}
+
+/* Mobile: smaller "Next" button. */
+@media (max-width: 640px) {
+  .next {
+    font-size: 14px;
+    line-height: 20px;
+    padding: 9px 18px;
+  }
+}
+
+@media (max-width: 560px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

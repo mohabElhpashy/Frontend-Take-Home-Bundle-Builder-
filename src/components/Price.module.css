@@ -6,6 +6,16 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* Large screen: struck + active price on one line (cards + review). */
+@media (min-width: 1280px) {
+  .price.card,
+  .price.review {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 6px;
+  }
+}
+
 .right {
   align-items: flex-end;
   text-align: right;
@@ -26,23 +36,42 @@
 
 /* Card: red strike, dark active price */
 .card .compare {
-  color: var(--c-strike-red);
+  color: #d8392b;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.4px;
+  text-align: right;
 }
 .card .active {
-  color: var(--c-text);
-  font-size: 1rem;
+  color: #575757;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.4px;
+  text-align: right;
 }
 
 /* Review: grey strike, indigo active price */
 .review .compare {
   color: var(--c-strike-soft);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0.005em;
+  text-align: right;
 }
 .review .active {
   color: var(--c-primary);
-  font-size: 0.92rem;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 16px;
+  letter-spacing: 0.005em;
+  text-align: right;
 }
 
 .free {
-  color: var(--c-success) !important;
-  font-weight: 700;
+  color: #4e2fd2 !important;
+  font-weight: 600;
+  text-align: center;
 }

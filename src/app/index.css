@@ -1,0 +1,104 @@
+@import '../styles/tokens.css';
+
+/* Tailwind utilities only (no preflight) so it won't reset existing styles. */
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+
+/*
+ * Design tokens — the single source of truth. Tailwind v4 turns each of these
+ * into both a utility (bg-primary, text-muted, rounded-card, shadow-card,
+ * split:…) and a CSS variable (--color-primary, …) that the CSS Modules alias
+ * in styles/tokens.css. Edit values here, use them anywhere.
+ */
+@theme {
+  /* Brand / accent */
+  --color-primary: #3d1ae5;
+  --color-primary-press: #3013c2;
+  --color-badge: #5b3df5;
+
+  /* Surfaces */
+  --color-panel: #edf0fe;
+  --color-card: #ffffff;
+
+  /* Text */
+  --color-ink: #1b1b2f;
+  --color-muted: #5c5c70;
+  --color-faint: #9090a6;
+
+  /* Pricing */
+  --color-strike-soft: #a0a0b4;
+  --color-strike-red: #e5484d;
+  --color-success: #16a36a;
+
+  /* Lines / borders */
+  --color-line: #e4e6f1;
+  --color-chip: #d6d8e6;
+  --color-divider: #e7e9f3;
+
+  /* Radius */
+  --radius-card: 14px;
+  --radius-block: 16px;
+  --radius-control: 10px;
+  --radius-pill: 999px;
+
+  /* Elevation */
+  --shadow-card: 0 1px 2px rgba(27, 27, 47, 0.05);
+  --shadow-pop: 0 8px 24px rgba(27, 27, 47, 0.12);
+
+  /* Type */
+  --font-sans:
+    'Poppins', 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial,
+    sans-serif;
+
+  /* Extra breakpoint: where the builder/review split side-by-side */
+  --breakpoint-split: 1140px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  color: var(--c-text);
+  background: #ffffff;
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  line-height: 1.45;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+a {
+  color: var(--c-primary);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+:focus-visible {
+  outline: 2px solid var(--c-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}

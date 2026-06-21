@@ -1,4 +1,4 @@
-import { formatMoney } from '../lib/money';
+import { formatMoney } from '@/lib/money';
 import styles from './Price.module.css';
 
 interface Props {

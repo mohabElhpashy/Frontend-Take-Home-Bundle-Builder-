@@ -1,0 +1,390 @@
+.panel {
+  background: #edf4ff;
+  border: 1px solid var(--c-border);
+  border-radius: 10px;
+  padding: 15px 28px 28px;
+  container-type: inline-size;
+}
+
+/* Stacked layout: edge-to-edge, no side borders/radius. */
+@media (max-width: 1023px) {
+  .panel {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+}
+
+/* Mobile: tighter padding/gaps + smaller titles. */
+@media (max-width: 640px) {
+  .panel {
+    padding: 14px 14px 22px;
+  }
+  .rowMain {
+    gap: 8px;
+  }
+  .rowControls {
+    gap: 8px;
+  }
+  .title {
+    font-size: 16px;
+  }
+  .name {
+    font-size: 13px;
+  }
+  .planFirst,
+  .planRest {
+    font-size: 16px;
+  }
+}
+
+/* Full-width review: itemized list on the left, checkout column on the right. */
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: 40px;
+  align-items: start;
+}
+/* Let grid columns shrink below their content (avoids horizontal overflow). */
+.grid > * {
+  min-width: 0;
+}
+
+.right {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Only the wide (large) panel uses 2 columns; everything else is single column. */
+@container (max-width: 1149px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+}
+
+.eyebrow {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  color: var(--c-text-3);
+}
+/* "REVIEW" eyebrow only on the narrow panel (medium + mobile). */
+@container (min-width: 640px) {
+  .eyebrow {
+    display: none;
+  }
+}
+
+.title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: #0b0d10;
+  margin-top: 6px;
+}
+
+.subtitle {
+  font-size: 0.85rem;
+  color: var(--c-text-2);
+  margin-top: 6px;
+  max-width: 300px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+
+.lines {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid #ced6de;
+}
+
+.group {
+  padding-bottom: 6px;
+}
+
+.groupLabel {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #a8b2bd;
+  padding: 12px 0 8px;
+  border-top: 1px solid #ced6de;
+}
+.group:first-child .groupLabel {
+  border-top: none;
+  padding-top: 0;
+}
+
+/* Divider above the shipping row = bottom border under the last group (plan). */
+.lines > .row {
+  margin-top: 8px;
+  padding-top: 15px;
+  border-top: 1px solid #ced6de;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 7px 0;
+}
+
+.rowMain {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+}
+
+.name {
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+.variant {
+  color: var(--c-text-2);
+  font-weight: 400;
+}
+
+.planFirst {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.002em;
+}
+.planRest {
+  color: #4e2fd2;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.002em;
+}
+
+.shipIcon {
+  display: grid;
+  place-items: center;
+  width: 41px;
+  height: 41px;
+  background: #ffffff;
+  border-radius: 5px;
+  color: var(--c-success);
+  opacity: 1;
+  flex: none;
+}
+.shipIcon svg {
+  width: 41px;
+  height: 41px;
+}
+
+.rowControls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: none;
+}
+
+/* ---- Guarantee + Summary ---------------------------------------------- */
+
+.summaryWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Narrow panel (mobile + medium sidebar): badge next to the total, no returns text. */
+@container (max-width: 639px) {
+  .summaryWrap {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+  }
+  .returns {
+    display: none;
+  }
+  .summary {
+    flex: 1;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    text-align: right;
+  }
+  .financing {
+    align-self: flex-end;
+    font-size: 12px;
+    padding: 5px 7px;
+  }
+  .totalRow {
+    align-self: flex-end;
+  }
+  .total {
+    font-size: 18px;
+    line-height: 20px;
+  }
+  .totalCompare {
+    font-size: 13px;
+    line-height: 14px;
+  }
+}
+
+.guarantee {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.returns {
+  min-width: 0;
+}
+
+.returnsTitle {
+  white-space: nowrap;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: 0.6px;
+}
+
+.returnsText {
+  margin-top: 6px;
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--c-text-2);
+  line-height: 1.1;
+  letter-spacing: 0.6px;
+}
+
+.summary {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.financing {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  background: #4e2fd2;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1;
+  border-radius: 3px;
+}
+
+.totalRow {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.totalCompare {
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0.0025em;
+  text-align: center;
+  color: #6f7882;
+  text-decoration: line-through;
+  font-variant-numeric: tabular-nums;
+}
+
+.total {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 32px;
+  letter-spacing: -0.0013em;
+  text-align: right;
+  color: #4e2fd2;
+  font-variant-numeric: tabular-nums;
+}
+
+.savings {
+  text-align: center;
+  color: #0aa288;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.06px;
+  white-space: nowrap;
+}
+/* Shrink on narrow panels so it stays one line (sized to the panel, not viewport). */
+@container (max-width: 640px) {
+  .savings {
+    font-size: 11px;
+  }
+}
+@container (max-width: 390px) {
+  .savings {
+    font-size: 10px;
+  }
+}
+
+.checkout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 48px;
+  padding: 13px 16px;
+  background: #4e2fd2;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background 0.12s ease;
+}
+.checkout:hover {
+  background: var(--c-primary-press);
+}
+
+.saveLink {
+  display: block;
+  width: 100%;
+  padding: 4px;
+  background: none;
+  border: none;
+  color: var(--c-text-2);
+  font-size: 0.85rem;
+  font-style: italic;
+  text-decoration: underline;
+}
+.saveLink:hover {
+  color: var(--c-primary);
+}
+
+.toast {
+  min-height: 18px;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--c-success);
+}
+
+/* Mobile: smaller financing pill + total (after the container query so it wins). */
+@media (max-width: 640px) {
+  .financing {
+    font-size: 11px;
+    padding: 4px 6px;
+  }
+  .total {
+    font-size: 16px;
+    line-height: 18px;
+  }
+  .totalCompare {
+    font-size: 11px;
+  }
+}

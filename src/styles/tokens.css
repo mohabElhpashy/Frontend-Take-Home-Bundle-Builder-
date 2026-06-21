@@ -1,41 +1,43 @@
+/*
+ * Compatibility aliases. The values live in the Tailwind @theme block
+ * (src/app/index.css); these short names are what the CSS Modules reference.
+ * Change a color/radius once in @theme and it updates everywhere.
+ */
 :root {
   /* Brand / accent */
-  --c-primary: #3d1ae5;
-  --c-primary-press: #3013c2;
-  --c-badge: #5b3df5;
+  --c-primary: var(--color-primary);
+  --c-primary-press: var(--color-primary-press);
+  --c-badge: var(--color-badge);
 
   /* Surfaces */
-  --c-page: #ffffff;
-  --c-panel: #edf0fe; /* lavender block behind the open step + review */
-  --c-card: #ffffff;
+  --c-page: var(--color-card);
+  --c-panel: var(--color-panel);
+  --c-card: var(--color-card);
 
   /* Text */
-  --c-text: #1b1b2f;
-  --c-text-2: #5c5c70;
-  --c-text-3: #9090a6; /* eyebrows / category subheads */
+  --c-text: var(--color-ink);
+  --c-text-2: var(--color-muted);
+  --c-text-3: var(--color-faint);
 
   /* Pricing */
-  --c-strike-soft: #a0a0b4; /* struck price in the review panel */
-  --c-strike-red: #e5484d; /* struck price on product cards */
-  --c-success: #16a36a; /* savings callout + FREE */
+  --c-strike-soft: var(--color-strike-soft);
+  --c-strike-red: var(--color-strike-red);
+  --c-success: var(--color-success);
 
   /* Lines / borders */
-  --c-border: #e4e6f1;
-  --c-chip-border: #d6d8e6;
-  --c-divider: #e7e9f3;
+  --c-border: var(--color-line);
+  --c-chip-border: var(--color-chip);
+  --c-divider: var(--color-divider);
 
   /* Shape */
-  --r-card: 14px;
-  --r-block: 16px;
-  --r-pill: 999px;
-  --r-control: 10px;
+  --r-card: var(--radius-card);
+  --r-block: var(--radius-block);
+  --r-pill: var(--radius-pill);
+  --r-control: var(--radius-control);
 
   /* Spacing rhythm */
   --gap: 16px;
 
-  --shadow-card: 0 1px 2px rgba(27, 27, 47, 0.05);
-  --shadow-pop: 0 8px 24px rgba(27, 27, 47, 0.12);
-
-  --font: 'Poppins', 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue',
-    Arial, sans-serif;
+  /* Type */
+  --font: var(--font-sans);
 }
